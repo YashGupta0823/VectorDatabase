@@ -1,20 +1,3 @@
-"""Research brief generation and idea assessment — no LLM required.
-
-Everything here is deterministic and grounded in the retrieved abstracts:
-
-* "Aim" / "reported result" are verbatim abstract sentences picked by cue
-  phrases ("we propose", "we find", ...). If no cue is found, the brief says so.
-* "Closest passage" is the abstract sentence whose embedding is closest to the
-  user's question (same MiniLM model as the vector search).
-* Methods, evidence type, markets and practical checks (transaction costs,
-  out-of-sample testing, ...) come from fixed phrase lexicons. The matched
-  phrase is always kept so a reader can verify it against the abstract.
-* Comparisons, gaps and follow-up questions are computed from those tags,
-  term overlap and embedding similarity. They are labelled as heuristics and
-  phrased as "mentioned / not mentioned in the abstracts", never as claims
-  about what the full papers contain.
-"""
-
 from __future__ import annotations
 
 import math
