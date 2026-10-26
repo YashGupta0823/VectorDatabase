@@ -1,20 +1,3 @@
-"""Reproduce the README's semantic-search examples against the local database.
-
-For each example query this prints:
-  * the top-5 semantic results (rank, similarity, title, link);
-  * a keyword-search baseline over the same corpus, ranked by how many of the
-    query's meaningful words a document contains. The baseline is deliberately
-    generous: case-insensitive, suffix-stripped and prefix-matched, so
-    "investors" also matches "investment" and "bill" matches "billion";
-  * for each target paper discussed in the README: its semantic rank and its
-    keyword rank (or "not found").
-
-Nothing is hard-coded except the queries and the IDs of the papers the README
-discusses; every rank and score is computed live. Run from the repo root:
-
-    python scripts/verify_semantic_examples.py
-"""
-
 import re
 import sys
 from pathlib import Path
