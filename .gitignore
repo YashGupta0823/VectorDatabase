@@ -1,0 +1,23 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.mypy_cache/
+.ruff_cache/
+
+# Secrets / local env
+.env
+.env.*
+
+# Local data (reproducible via `python app.py import`)
+data/
+chroma_db/
+outputs/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
