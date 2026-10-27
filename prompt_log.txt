@@ -1,3 +1,6 @@
+I used ChatGPT during the initial planning phase to brainstorm project ideas, evaluate where a vector database would provide value over traditional keyword search, and outline the application's requirements and architecture. I used Claude Code directly within VS Code for implementation. I chose these tools because ChatGPT was useful for exploring the overall project direction, while Claude Code could directly access and modify the repository, execute Python commands, and debug the implementation.
+
+
 1) I need to build an application around a persistent vector database for a programming assignment. I want something related to quantitative finance or trading that could also be useful in my portfolio. Suggest a practical application involving a substantial dataset, natural-language semantic search, runtime additions, and meaningful processing of retrieved results.
 
 My top idea: AlphaSearch — AI-Powered Trading Research Finder
