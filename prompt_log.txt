@@ -1,54 +1,88 @@
-ChatGPT (GPT-6), Claude Code 
-
-I used ChatGPT during the initial planning phase to brainstorm project ideas, evaluate how a vector database could add value, and outline the implementation requirements and I used Claude Code within VS Code for all the implementation and integration.
-
-Claude code below:
 1) I need to build an application around a persistent vector database for a programming assignment. I want something related to quantitative finance or trading that could also be useful in my portfolio. Suggest a practical application involving a substantial dataset, natural-language semantic search, runtime additions, and meaningful processing of retrieved results.
 
-- Compared several possible applications.
-- Selected a semantic research assistant focused on quantitative finance.
-- Identified arXiv abstracts as a suitable starting corpus.
-- Chose ChromaDB for persistent vector storage.
-- Planned semantic search, user-added notes, and research brief generation.
+My top idea: AlphaSearch — AI-Powered Trading Research Finder
+Concept: A semantic search engine for quantitative finance research. A user describes a trading idea, market concern, or investment strategy in everyday language, and the app finds relevant academic papers, explains how they're connected, and helps the user develop a research plan.
 
-Established the AlphaSearch concept and initial architecture.
+For example, someone could type:
+"I want to protect my portfolio against sudden market crashes."
 
+Instead of looking for those exact words, AlphaSearch could find research about tail-risk hedging, volatility derivatives, and downside protection.
+
+(Claude Code from here)
 2) Build the initial version of AlphaSearch in my existing repository. Use Python and ChromaDB with a persistent local collection and an offline embedding model. Download real quantitative finance research abstracts from arXiv, storing each paper's title, abstract, authors, publication date, category, and URL.
 Create an interactive CLI that lets users perform semantic searches, add research notes at runtime, view database statistics, and generate research briefs. Ensure added notes are immediately searchable and survive application restarts. Include appropriate error handling, dependency documentation, and tests. Do not use paid APIs or hard-coded search results.
 
-- Created modules for the CLI, database, data importer, and research analysis.
-- Implemented ChromaDB persistence.
-- Added arXiv API retrieval and duplicate prevention.
-- Implemented semantic similarity search.
-- Added research notes and Markdown export functionality.
+- Created separate Python modules for the command-line application, database management, arXiv data ingestion, and research analysis.
+- Implemented a persistent ChromaDB collection using cosine similarity and local text embeddings.
+- Integrated the arXiv API to retrieve research papers across six quantitative finance categories.
+- Loaded 600 unique research papers, storing the title and abstract as searchable text alongside metadata such as authors, publication date, category, and URL.
+- Added duplicate prevention using arXiv paper IDs so repeated imports would not create additional copies.
+- Implemented semantic similarity search to retrieve the nearest research papers to a natural-language query.
+- Added functionality for inserting new research notes and making them searchable within the same session.
+- Created a research brief generator that organizes retrieved information and exports Markdown reports.
+- Added an interactive terminal menu and database statistics.
 
-A first working version of the application capable of storing and searching research papers.
+Created the first working version of AlphaSearch, capable of importing academic papers, performing vector similarity searches, storing user research notes, and generating research briefs.
 
 3) Audit the current AlphaSearch implementation and test the core workflows. Verify that the ChromaDB collection survives restarting Python, that new documents are searchable immediately, and that importing the same arXiv papers twice does not create duplicates. Add pytest tests using temporary databases. Run the tests and fix the problems
 
-- Ran the pytest suite.
-- Investigated failing tests and edge cases.
-- Tested persistence using separate application processes.
-- Checked duplicate prevention during dataset re-imports.
-- Verified that database queries used vector similarity.
-Improved reliability and expanded automated test coverage.
+- Ran automated tests using pytest to evaluate database operations, retrieval, research brief generation, and error handling.
+- Tested whether new documents remained accessible after restarting the application in a separate Python process.
+- Confirmed that newly added research notes could be found immediately through semantic search.
+- Reimported the same research corpus and verified that duplicates were skipped.
+- Checked that the application used ChromaDB embedding similarity instead of exact keyword matching.
+- Tested empty inputs, invalid selections, and edge cases.
+- Verified that database contents could be retrieved without an internet connection after initial setup.
+
+Issues:
+Two initial tests failed because of problems with the synthetic test inputs:
+1. A document intended to demonstrate semantic similarity without shared keywords accidentally contained a word from the test query.
+2. A test document was shorter than the application's minimum accepted text length.
+
+Improved application reliability and expanded automated test coverage. The initial implementation ultimately passed 38 tests before additional functionality and testing improvements increased the total to 46 passing tests.
 
 4) Evaluate the quality of AlphaSearch's semantic retrieval against the actual stored papers. Find two realistic natural-language questions that retrieve relevant papers even when the queries don't share important keywords with the target abstracts. Compare results against a straightforward keyword search. Also review the research brief generator and improve its ability to compare papers, identify limitations, and suggest follow-up research questions. Do not fabricate findings or citations.
 
-- Compared multiple natural-language queries.
-- Examined retrieved paper titles and abstracts.
-- Selected examples involving catastrophe bonds and bank runs.
-- Compared vector-based matches with keyword-based results.
-- Improved research brief formatting and evidence attribution.
-- Documented limitations of abstract-only analysis.
-Two semantic search demonstrations and a more useful research brief feature.
+- Evaluated several natural-language queries against the actual 600-paper database.
+- Examined retrieved paper titles and abstracts to determine whether matches were conceptually relevant.
+- Compared vector similarity results against traditional keyword matching.
+- Identified two demonstration queries involving catastrophe bonds and bank runs.
+- Improved the research brief generator to compare related research, identify limitations, and generate follow-up questions.
+- Added clearer citations and evidence from the original abstracts.
+- Improved the terminal presentation with similarity scores, relevance indicators, paper metadata, and source links.
+- Documented limitations in retrieval quality when queries are vague or the corpus lacks relevant research.
 
-5) Perform a final review of the AlphaSearch repository. Check that dependencies, setup instructions, database initialization, and import commands work correctly. Verify that .gitignore excludes local databases, downloaded datasets, virtual environments, and sensitive files. Run all automated tests and identify remaining issues.
+Trial 1:
+Query: "Who covers the bill when a hurricane strikes, and can outside investors carry that danger?"
+Retrieved paper: Design and pricing of a transparent parametric-modeled loss CAT bond
+The query describes catastrophe-related risk transfer in everyday language, while the research paper uses technical terminology associated with catastrophe bonds.
 
-- Reviewed the final directory structure.
-- Checked installation and execution commands.
-- Inspected Git tracking and ignored files.
-- Reviewed documentation for accuracy.
-- Prepared a demonstration sequence.
-- Identified remaining student-written documentation requirements.
-reproducible local project prepared for final review and publication.
+Trial 2:
+
+Query: "What happens when frightened customers all rush to withdraw their savings at once?"
+Retrieved paper: Bank Run Exposure in a Paycheck-to-Paycheck Economy with Loss-Averse Depositors
+The query describes the behavior associated with a bank run without directly using that financial term.
+
+
+5) Reviewing generated research briefs revealed several problems with the initial analysis:
+- The system incorrectly claimed that certain concepts were absent because it did not consistently account for different forms of a word.
+- Some extracted phrases were too generic to be useful.
+- Certain follow-up questions were not sufficiently connected to the original research topic.
+
+6) Perform a final review of the AlphaSearch repository. Check that dependencies, setup instructions, database initialization, and import commands work correctly. Verify that .gitignore excludes local databases, downloaded datasets, virtual environments, and sensitive files. Run all automated tests and identify remaining issues.
+
+
+- Reviewed the Python files and overall project organization.
+- Verified installation dependencies and commands for running the application.
+- Checked that the local ChromaDB database, virtual environment, cached data, and generated outputs were excluded from version control.
+- Reviewed the README instructions and identified sections requiring student-written explanations.
+- Verified that the original corpus could be reproduced using a saved list of 600 arXiv paper IDs.
+- Recreated the project in a fresh environment and tested database import and semantic retrieval.
+- Ran the automated test suite again.
+- Prepared a demonstration guide outlining how to show semantic search, runtime additions, and database persistence.
+
+- Final automated test suite: 46 tests passed, 0 failed.
+- Successfully imported 600 research papers.
+- Verified persistent storage and immediate retrieval of newly added notes.
+- Confirmed that the existing database remained searchable offline.
+- Confirmed that the same dataset could be reconstructed from saved paper IDs.
